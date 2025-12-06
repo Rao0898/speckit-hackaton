@@ -1,0 +1,7 @@
+I have created the feature specification for the "Physical AI & Humanoid Robotics" textbook.
+
+- **Branch**: `001-spec-physical-ai-textbook`
+- **Specification**: `specs/001-spec-physical-ai-textbook/spec.md`
+- **Checklist**: `specs/001-spec-physical-ai-textbook/checklists/requirements.md` (All checks passed)
+
+The specification is complete and ready for the next phase (`/sp.plan`).

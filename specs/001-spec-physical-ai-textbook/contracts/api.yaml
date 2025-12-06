@@ -1,0 +1,100 @@
+openapi: 3.0.0
+info:
+  title: Physical AI Textbook RAG API
+  version: 1.0.0
+  description: API for the Retrieval-Augmented Generation (RAG) chatbot for the Physical AI & Humanoid Robotics textbook.
+
+paths:
+  /search:
+    post:
+      summary: Perform a vector search
+      description: Takes a user query, converts it to an embedding, and searches the vector store for relevant document chunks.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: The user's question.
+                  example: "How do I use rclpy to create a node?"
+                top_k:
+                  type: integer
+                  description: The number of results to return.
+                  default: 5
+      responses:
+        '200':
+          description: A list of relevant document chunks.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentChunk'
+        '400':
+          description: Bad request (e.g., missing query).
+
+  /rag-answer:
+    post:
+      summary: Get a RAG-generated answer
+      description: Takes a user query, performs a search to find relevant context, and then uses a language model to generate a comprehensive answer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: The user's question.
+                  example: "Explain the difference between a topic and a service in ROS 2."
+      responses:
+        '200':
+          description: A generated answer based on the retrieved context.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                    example: "In ROS 2, a topic is used for continuous data streams (many-to-many), while a service is for request/response interactions (one-to-one)."
+                  source_chunks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DocumentChunk'
+        '400':
+          description: Bad request.
+
+components:
+  schemas:
+    DocumentChunk:
+      type: object
+      properties:
+        chunk_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        document_id:
+          type: string
+          example: "modules/module1/ros-basics.md"
+        content:
+          type: string
+          example: "rclpy.init() is the first call you should make in your Python-based ROS 2 node..."
+        metadata:
+          type: object
+          properties:
+            chapter:
+              type: string
+              example: "ROS 2 Basics"
+            section:
+              type: string
+              example: "Creating a Node"
+            tags:
+              type: array
+              items:
+                type: string
+              example: ["ROS 2", "rclpy", "node"]
