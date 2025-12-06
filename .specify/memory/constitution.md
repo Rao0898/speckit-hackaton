@@ -1,55 +1,61 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Physical AI & Humanoid Robotics Constitution
 
-## Core Principles
+## Core Vision & Purpose
+- Teach Physical AI & embodied intelligence.
+- Bridge AI agents (digital brain) + humanoid robots (physical body).
+- Train students to build, simulate, deploy humanoids using ROS 2, Gazebo, Unity, NVIDIA Isaac.
+- Prepare learners for real-world Physical AI systems.
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+## Quarter Overview
+The future of AI extends beyond digital spaces into the physical world. This capstone quarter introduces Physical AI—AI systems that operate in reality and understand physical laws. Students learn to design, simulate, and deploy humanoid robots capable of natural human interactions using ROS 2, Gazebo, Unity, and NVIDIA Isaac.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+## Course Modules
+### MODULE 1 — ROS 2
+Robot middleware, nodes, topics, services, rclpy agent bridge, URDF.
+### MODULE 2 — Gazebo & Unity
+Physics simulation, joints, collisions, rendering, HRI, sensors (LiDAR, Depth, IMU).
+### MODULE 3 — NVIDIA Isaac
+Isaac Sim, Isaac ROS (SLAM/nav), Nav2 for bipedal planning.
+### MODULE 4 — VLA
+Whisper voice-to-action, LLM→ROS2 planning, capstone humanoid voice agent.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+## Hackathon Requirements
+1) Book built with Docusaurus + deployed to GitHub Pages.
+2) Full RAG chatbot using:
+   - OpenAI Agents or ChatKit SDK
+   - FastAPI backend
+   - Qdrant Cloud
+   - Neon Postgres
+3) Chatbot supports text-selection Q&A + embeddings + vector search.
+4) Reusable intelligence: Claude Code Subagents, Skills, Content workflows.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+## Project Structure
+- `/docs`
+- `/modules`
+- `/chapters`
+- `/labs`
+- `/projects`
+- `/blueprints`
+- `/agents`
+- `/skills`
+- `/rag-backend`
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+## Writing Standards
+- AI-native, interactive textbook
+- Clear learning outcomes per chapter
+- Diagrams, examples, code samples
+- Labs for each module
+- Full capstone description
 
-### [PRINCIPLE_6_NAME]
-
-
-[PRINCIPLE__DESCRIPTION]
-
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Agent Roles
+- Writing Agent
+- Editing Agent
+- Quiz Generator Agent
+- RAG Embedder Agent
+- Code Generator Agent
+- Chatbot Reasoning Agent
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+This constitution supersedes all other practices. Amendments require documentation, approval, and a migration plan. All PRs/reviews must verify compliance. Complexity must be justified.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-12-06 | **Last Amended**: 2025-12-06
