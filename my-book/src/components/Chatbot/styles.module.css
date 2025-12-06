@@ -1,0 +1,111 @@
+.chatbotContainer {
+  display: flex;
+  flex-direction: column;
+  height: 500px; /* Adjust as needed */
+  border: 1px solid var(--ifm-color-gray-300);
+  border-radius: var(--ifm-border-radius);
+  overflow: hidden;
+  margin-top: 20px;
+  background-color: var(--ifm-background-color);
+}
+
+.messagesContainer {
+  flex-grow: 1;
+  padding: 10px;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--ifm-color-gray-200);
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: var(--ifm-border-radius);
+  max-width: 80%;
+}
+
+.message.user {
+  background-color: var(--ifm-color-primary-light);
+  color: var(--ifm-color-white);
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.message.bot {
+  background-color: var(--ifm-color-secondary-light);
+  color: var(--ifm-color-white);
+  align-self: flex-start;
+  margin-right: auto;
+}
+
+.message p {
+  margin-bottom: 0;
+}
+
+.loadingMessage {
+  text-align: center;
+  font-style: italic;
+  color: var(--ifm-color-gray-600);
+  padding: 10px;
+}
+
+.inputContainer {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid var(--ifm-color-gray-200);
+}
+
+.inputContainer input {
+  flex-grow: 1;
+  border: 1px solid var(--ifm-color-gray-300);
+  border-radius: var(--ifm-border-radius);
+  padding: 8px 12px;
+  margin-right: 10px;
+  background-color: var(--ifm-color-white);
+  color: var(--ifm-font-color-base);
+}
+
+.inputContainer button {
+  background-color: var(--ifm-color-primary);
+  color: var(--ifm-color-white);
+  border: none;
+  border-radius: var(--ifm-border-radius);
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.inputContainer button:disabled {
+  background-color: var(--ifm-color-gray-400);
+  cursor: not-allowed;
+}
+
+.sourceChunks {
+  font-size: 0.8em;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.sourceChunks h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  color: var(--ifm-color-white);
+}
+
+.sourceChunks ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sourceChunks li {
+  margin-bottom: 3px;
+}
+
+.sourceChunks a {
+  color: var(--ifm-color-white);
+  text-decoration: underline;
+}
+
+.sourceChunks a:hover {
+  color: var(--ifm-color-primary-light);
+}

@@ -65,12 +65,12 @@
 
 ### Implementation for User Story 3
 
-- [ ] T020 [P] [US3] Implement the `/rag-answer` endpoint from `contracts/api.yaml` in `rag-backend/src/main.py`.
-- [ ] T021 [US3] Create a new React component for the chatbot UI in `my-book/src/components/Chatbot/`.
-- [ ] T022 [US3] Add the `Chatbot` component to the Docusaurus layout in `my-book/src/theme/Layout/index.tsx`.
-- [ ] T023 [P] [US3] Write content for Module 3 "NVIDIA Isaac" in `my-book/docs/module3-nvidia-isaac/`.
-- [ ] T024 [P] [US3] Write content for Module 4 "Voice-to-Action" in `my-book/docs/module4-vla/`.
-- [ ] T025 [US3] Run the ingestion script (`rag-backend/src/ingest.py`) to process all new content.
+- [x] T020 [P] [US3] Implement the `/rag-answer` endpoint from `contracts/api.yaml` in `rag-backend/src/main.py`.
+- [x] T021 [US3] Create a new React component for the chatbot UI in `my-book/src/components/Chatbot/`.
+- [x] T022 [US3] Add the `Chatbot` component to the Docusaurus layout in `my-book/src/theme/Layout/index.tsx`.
+- [x] T023 [P] [US3] Write content for Module 3 "NVIDIA Isaac" in `my-book/docs/module3-nvidia-isaac/`.
+- [x] T024 [P] [US3] Write content for Module 4 "Voice-to-Action" in `my-book/docs/module4-vla/`.
+- [x] T025 [US3] Run the ingestion script (`rag-backend/src/ingest.py`) to process all new content.
 
 ---
 
