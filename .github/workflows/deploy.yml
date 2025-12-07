@@ -18,15 +18,15 @@ jobs:
  cache: npm
  cache-dependency-path: my-book/package-lock.json
 - name: Install dependencies
- working-directory: your-book-folder
+ working-directory: my-book
  run: npm ci
 - name: Build website
- working-directory: your-book-folder
+ working-directory: my-book
  run: npm run build
 - name: Upload Build Artifact
  uses: actions/upload-pages-artifact@v3
  with:
- path: your-book-folder/build
+ path: my-book/build
 deploy:
  name: Deploy to GitHub Pages
  needs: build
