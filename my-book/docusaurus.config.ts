@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'Physical AI & Humanoid Robotics',
+  tagline: 'Dive into the world of Physical AI and Humanoid Robotics',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -15,15 +15,15 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://physical-ai-humanoid-robotics.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'physical-ai-robotics', // Usually your GitHub org/user name.
+  projectName: 'textbook', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -32,7 +32,7 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'ur'],
   },
 
   presets: [
@@ -43,8 +43,6 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
           showReadingTime: true,
@@ -54,8 +52,6 @@ const config: Config = {
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -75,9 +71,9 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'My Site',
+      title: 'Physical AI & Humanoid Robotics',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Physical AI & Humanoid Robotics Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -88,6 +84,12 @@ const config: Config = {
           label: 'Tutorial',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/chatbot', label: 'Chatbot', position: 'left'}, // New Chatbot link
+        {
+          type: 'localeDropdown', // Language dropdown
+          position: 'right',
+        },
+      
         {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
@@ -138,13 +140,30 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
+  // Add MDXComponents configuration
+  // This allows you to use your custom React components directly in MDX files
+  // e.g., import PersonalizedSection from '@site/src/components/PersonalizedSection';
+  // <PersonalizedSection software="python">...</PersonalizedSection>
+  // However, for now, we'll let users import it explicitly in each MDX file if needed.
+  // Docusaurus v3 often prefers explicit imports within MDX files.
+  // If we want global availability without explicit imports, we'd need a plugin or theme swizzling.
+  // For simplicity, we'll assume explicit imports in MDX for now.
+  // This change primarily highlights the intent to use custom MDX components.
+  // No direct change to docusaurus.config.ts is typically needed for explicit MDX imports.
+
+  // Let's add a custom remark plugin to allow global MDX components injection
+  // This requires a custom plugin or to modify a theme, which is more complex.
+  // For a hackathon, explicit import in MDX files is fine.
+  // I will revert this change and instead instruct the user to import it in MDX files.
+  // This simplifies the config and avoids potentially complex plugin setup for a hackathon.
+
 };
 
 export default config;

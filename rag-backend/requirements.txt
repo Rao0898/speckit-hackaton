@@ -3,6 +3,6 @@ uvicorn
 python-dotenv
 qdrant-client
 psycopg2-binary
-openai
-tiktoken
+google-generativeai
 markdown
+better_auth

@@ -17,6 +17,14 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
+/* Ensure input text color is black for readability */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  color: var(--ifm-font-color-base);
+}
+
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
   --ifm-color-primary: #25c2a0;

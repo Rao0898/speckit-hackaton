@@ -1,28 +1,31 @@
 import os
 import markdown
 from bs4 import BeautifulSoup
-import tiktoken
+from typing import List
 from .database import db_service
 from .models import DocumentChunk
-from openai import OpenAI
+from .gemini_config import gemini_model # Import the initialized GeminiModel
+import json
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+def get_embedding(text):
+    return gemini_model.embed_content(text=text)
 
-def get_embedding(text, model="text-embedding-3-small"):
-   text = text.replace("\n", " ")
-   return client.embeddings.create(input = [text], model=model).data[0].embedding
-
-def chunk_text(text, max_tokens=512):
+def chunk_text(text, max_chars=1000):
     """
-    A simple text chunking implementation.
+    A simple text chunking implementation based on character count.
     This can be improved with more sophisticated sentence-aware chunking.
     """
-    tokenizer = tiktoken.get_encoding("cl100k_base")
-    tokens = tokenizer.encode(text)
     chunks = []
-    for i in range(0, len(tokens), max_tokens):
-        chunk_tokens = tokens[i:i + max_tokens]
-        chunks.append(tokenizer.decode(chunk_tokens))
+    current_chunk = ""
+    words = text.split()
+    for word in words:
+        if len(current_chunk) + len(word) + 1 <= max_chars:
+            chunks.append(current_chunk.strip())
+            current_chunk = word + " "
+        else:
+            current_chunk += (word + " ")
+    if current_chunk:
+        chunks.append(current_chunk.strip())
     return chunks
 
 def ingest_markdown_files(directory):
@@ -57,7 +60,7 @@ def ingest_markdown_files(directory):
                     # Save to Postgres
                     cursor.execute(
                         "INSERT INTO document_chunks (chunk_id, document_id, content, metadata) VALUES (%s, %s, %s, %s)",
-                        (str(doc_chunk.chunk_id), doc_chunk.document_id, doc_chunk.content, str(doc_chunk.metadata))
+                        (str(doc_chunk.chunk_id), doc_chunk.document_id, doc_chunk.content, json.dumps(doc_chunk.metadata))
                     )
 
                     # Save to Qdrant
@@ -73,6 +76,43 @@ def ingest_markdown_files(directory):
     db_service.postgres_conn.commit()
     cursor.close()
     print("Ingestion complete.")
+
+def search_documents(query: str, top_k: int = 5) -> List[DocumentChunk]:
+    query_embedding = gemini_model.embed_content(text=query, task_type="RETRIEVAL_QUERY")
+    qdrant = db_service.get_qdrant_client()
+
+    search_result = qdrant.search(
+        collection_name="textbook",
+        query_vector=query_embedding,
+        limit=top_k
+    )
+
+    chunk_ids = [hit.id for hit in search_result]
+    if not chunk_ids:
+        return []
+
+    # Fetch full DocumentChunk data from Postgres
+    cursor = db_service.get_postgres_cursor()
+    placeholders = ','.join(['%s'] * len(chunk_ids))
+    cursor.execute(
+        f"SELECT chunk_id, document_id, content, metadata FROM document_chunks WHERE chunk_id IN ({placeholders})",
+        tuple(str(cid) for cid in chunk_ids)
+    )
+    db_chunks_data = cursor.fetchall()
+    cursor.close()
+
+    retrieved_chunks = []
+    for row in db_chunks_data:
+        chunk_id, document_id, content, metadata = row
+        retrieved_chunks.append(DocumentChunk(
+            chunk_id=chunk_id,
+            document_id=document_id,
+            content=content,
+            metadata=json.loads(metadata) # Assuming metadata is stored as JSON string
+        ))
+    
+    return retrieved_chunks
+
 
 if __name__ == "__main__":
     # This is an example of how to run the ingestion

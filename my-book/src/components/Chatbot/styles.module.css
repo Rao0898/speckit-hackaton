@@ -1,111 +1,96 @@
 .chatbotContainer {
-  display: flex;
-  flex-direction: column;
-  height: 500px; /* Adjust as needed */
-  border: 1px solid var(--ifm-color-gray-300);
-  border-radius: var(--ifm-border-radius);
-  overflow: hidden;
-  margin-top: 20px;
-  background-color: var(--ifm-background-color);
-}
-
-.messagesContainer {
-  flex-grow: 1;
-  padding: 10px;
-  overflow-y: auto;
-  border-bottom: 1px solid var(--ifm-color-gray-200);
-}
-
-.message {
-  margin-bottom: 10px;
-  padding: 8px 12px;
-  border-radius: var(--ifm-border-radius);
-  max-width: 80%;
-}
-
-.message.user {
-  background-color: var(--ifm-color-primary-light);
-  color: var(--ifm-color-white);
-  align-self: flex-end;
-  margin-left: auto;
-}
-
-.message.bot {
-  background-color: var(--ifm-color-secondary-light);
-  color: var(--ifm-color-white);
-  align-self: flex-start;
-  margin-right: auto;
-}
-
-.message p {
-  margin-bottom: 0;
-}
-
-.loadingMessage {
-  text-align: center;
-  font-style: italic;
-  color: var(--ifm-color-gray-600);
-  padding: 10px;
-}
-
-.inputContainer {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid var(--ifm-color-gray-200);
-}
-
-.inputContainer input {
-  flex-grow: 1;
-  border: 1px solid var(--ifm-color-gray-300);
-  border-radius: var(--ifm-border-radius);
-  padding: 8px 12px;
-  margin-right: 10px;
-  background-color: var(--ifm-color-white);
-  color: var(--ifm-font-color-base);
-}
-
-.inputContainer button {
-  background-color: var(--ifm-color-primary);
-  color: var(--ifm-color-white);
-  border: none;
-  border-radius: var(--ifm-border-radius);
-  padding: 8px 15px;
-  cursor: pointer;
-}
-
-.inputContainer button:disabled {
-  background-color: var(--ifm-color-gray-400);
-  cursor: not-allowed;
-}
-
-.sourceChunks {
-  font-size: 0.8em;
-  margin-top: 5px;
-  padding-top: 5px;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.sourceChunks h4 {
-  margin-top: 0;
-  margin-bottom: 5px;
-  color: var(--ifm-color-white);
-}
-
-.sourceChunks ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sourceChunks li {
-  margin-bottom: 3px;
-}
-
-.sourceChunks a {
-  color: var(--ifm-color-white);
-  text-decoration: underline;
-}
-
-.sourceChunks a:hover {
-  color: var(--ifm-color-primary-light);
-}
+    display: flex;
+    flex-direction: column;
+    height: 500px; /* Adjust height as needed */
+    border: 1px solid var(--ifm-toc-border-color);
+    border-radius: var(--ifm-border-radius);
+    overflow: hidden;
+    background-color: var(--ifm-background-color);
+    box-shadow: var(--ifm-color-shadow-light);
+  }
+  
+  .messagesContainer {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: var(--ifm-code-background);
+  }
+  
+  .message {
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--ifm-border-radius);
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .message.user {
+    align-self: flex-end;
+    background-color: var(--ifm-color-primary);
+    color: var(--ifm-font-color-inverse);
+    border-bottom-right-radius: 0;
+  }
+  
+  .message.bot {
+    align-self: flex-start;
+    background-color: var(black);
+    color: var(--ifm-font-color-base);
+    border-bottom-left-radius: 0;
+  }
+  
+  .selectedTextDisplay {
+    padding: 0.75rem 1rem;
+    background-color: var(--ifm-color-emphasis-200);
+    border-top: 1px solid var(--ifm-toc-border-color);
+    font-size: 0.85rem;
+    color: var(--ifm-font-color-secondary);
+    border-bottom: 1px solid var(--ifm-toc-border-color);
+    word-wrap: break-word;
+  }
+  
+  .inputForm {
+    display: flex;
+    padding: 1rem;
+    border-top: 1px solid var(--ifm-toc-border-color);
+    background-color: var(--ifm-background-color);
+  }
+  
+  .textInput {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--ifm-toc-border-color);
+    border-radius: var(--ifm-border-radius);
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    color: var(--ifm-font-color-base); /* This will address the grey to black issue */
+  }
+  
+  .textInput:focus {
+    outline: none;
+    border-color: var(--ifm-color-primary);
+    box-shadow: 0 0 0 2px var(--ifm-color-primary-light);
+  }
+  
+  .sendButton {
+    background-color: var(--ifm-color-primary);
+    color: var(--ifm-font-color-inverse);
+    border: none;
+    border-radius: var(--ifm-border-radius);
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  .sendButton:hover:not(:disabled) {
+    background-color: var(--ifm-color-primary-dark);
+  }
+  
+  .sendButton:disabled {
+    background-color: var(black);
+    cursor: not-allowed;
+  }

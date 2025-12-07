@@ -1,104 +1,107 @@
-import React, { useState } from 'react';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import styles from './styles.module.css';
+import { useChatbot } from '../../contexts/ChatbotContext';
 
-interface ChatMessage {
+interface Message {
   text: string;
   sender: 'user' | 'bot';
-  sourceChunks?: any[]; // To store source document chunks
 }
 
-function Chatbot() {
-  const { siteConfig } = useDocusaurusContext();
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
+interface ChatbotProps {
+  initialMessages: Message[];
+  onNewMessage: (message: Message) => void;
+}
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
+  const { selectedText, chatMessages, addChatMessage } = useChatbot();
+  const [input, setInput] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const userMessage: ChatMessage = { text: input, sender: 'user' };
-    setMessages((prev) => [...prev, userMessage]);
+  // Fix #1: Safe variables for length check
+  const safeInitial = initialMessages || [];
+  const safeChat = chatMessages || [];
+
+  useEffect(() => {
+    if (safeInitial.length !== safeChat.length || safeInitial[safeInitial.length - 1] !== safeChat[safeChat.length - 1]) {
+      // Sync logic if needed
+    }
+  }, [safeInitial, safeChat]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  useEffect(scrollToBottom, [chatMessages]);
+
+  const handleSendMessage = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() && !selectedText) return;
+
+    let currentMessage = input.trim();
+    if (selectedText && !input.trim()) {
+      // Fix #2: selectedText safe length check
+      currentMessage = `Based on "${selectedText}", ${selectedText && selectedText.length > 50 ? "what can you tell me?" : "explain this."}`;
+    } else if (selectedText) {
+      currentMessage = `Regarding "${selectedText}", ${input.trim()}`;
+    }
+
+    const userMessage: Message = { text: currentMessage, sender: 'user' };
+    addChatMessage(userMessage);
     setInput('');
     setLoading(true);
 
     try {
-      // Assuming your FastAPI backend is running on http://localhost:8000
       const response = await fetch('http://localhost:8000/rag-answer', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query: userMessage.text }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: currentMessage, context: selectedText }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
       const data = await response.json();
-      const botMessage: ChatMessage = {
-        text: data.answer || 'I could not find an answer.',
-        sender: 'bot',
-        sourceChunks: data.source_chunks || [],
-      };
-      setMessages((prev) => [...prev, botMessage]);
+      const botMessage: Message = { text: data?.answer || "Sorry, I couldn't get an answer.", sender: 'bot' };
+      addChatMessage(botMessage);
     } catch (error) {
-      console.error('Chatbot API error:', error);
-      setMessages((prev) => [
-        ...prev,
-        { text: 'Oops! Something went wrong. Please try again.', sender: 'bot' },
-      ]);
+      console.error('Error sending message:', error);
+      const errorMessage: Message = { text: 'An error occurred. Please try again.', sender: 'bot' };
+      addChatMessage(errorMessage);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      sendMessage();
     }
   };
 
   return (
     <div className={styles.chatbotContainer}>
       <div className={styles.messagesContainer}>
-        {messages.map((msg, index) => (
+        {(chatMessages || []).map((msg, index) => (
           <div key={index} className={`${styles.message} ${styles[msg.sender]}`}>
-            <p>{msg.text}</p>
-            {msg.sender === 'bot' && msg.sourceChunks && msg.sourceChunks.length > 0 && (
-              <div className={styles.sourceChunks}>
-                <h4>Sources:</h4>
-                <ul>
-                  {msg.sourceChunks.map((chunk, idx) => (
-                    <li key={idx}>
-                      <a href={`/docs/${chunk.document_id.replace(/\.mdx?$/, '')}`} target="_blank" rel="noopener noreferrer">
-                        {chunk.metadata?.chapter} - {chunk.metadata?.section} (Chunk ID: {chunk.chunk_id.substring(0, 8)})
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {msg.text}
           </div>
         ))}
-        {loading && <div className={styles.loadingMessage}>Thinking...</div>}
+        {loading && <div className={`${styles.message} ${styles.bot}`}>Loading...</div>}
+        <div ref={messagesEndRef} />
       </div>
-      <div className={styles.inputContainer}>
+
+      {selectedText && (
+        <div className={styles.selectedTextDisplay}>
+          Context: "{selectedText && (selectedText.length > 100 ? selectedText.substring(0, 100) + '...' : selectedText)}"
+        </div>
+      )}
+
+      <form onSubmit={handleSendMessage} className={styles.inputForm}>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Ask me a question about the textbook..."
+          placeholder={selectedText ? `Ask about "${selectedText?.substring(0, 20)}..."` : "Ask a question about the textbook..."}
+          className={styles.textInput}
           disabled={loading}
         />
-        <button onClick={sendMessage} disabled={loading}>
+        <button type="submit" disabled={loading} className={styles.sendButton}>
           Send
         </button>
-      </div>
+      </form>
     </div>
   );
-}
+};
 
 export default Chatbot;
