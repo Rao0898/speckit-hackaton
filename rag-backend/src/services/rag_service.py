@@ -1,15 +1,12 @@
-from openai import OpenAI
-import os
-import sys
-from pathlib import Path
+import google.generativeai as genai
 
 from ..core.qdrant import qdrant_client
 from ..models.query import QueryResponse, Citation, QuerySelectionRequest
 from ..core.logger import logger
 from ..core.embeddings import get_embedding
 
-# Initialize OpenAI client for chat completions
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Initialize Gemini client for chat completions
+model = genai.GenerativeModel('gemini-pro')
 COLLECTION_NAME = "textbook_content"
 
 class RAGService:
@@ -52,15 +49,9 @@ class RAGService:
         Question: {query}
         """
 
-        # Generate the answer using OpenAI
-        chat_completion = openai_client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt},
-            ],
-            model="gpt-4o",
-        )
-        answer = chat_completion.choices[0].message.content
+        # Generate the answer using Gemini
+        response = model.generate_content(prompt)
+        answer = response.text
         logger.info("Generated answer for general query.")
         return QueryResponse(answer=answer, citations=citations)
 
@@ -84,15 +75,9 @@ class RAGService:
         Question: {request.query}
         """
 
-        # Generate the answer using OpenAI
-        chat_completion = openai_client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt},
-            ],
-            model="gpt-4o",
-        )
-        answer = chat_completion.choices[0].message.content
+        # Generate the answer using Gemini
+        response = model.generate_content(prompt)
+        answer = response.text
         logger.info("Generated answer for selection query.")
         # For selection-based queries, the citation is the selection itself
         citations = [Citation(source_file="user_selection", text=context)]

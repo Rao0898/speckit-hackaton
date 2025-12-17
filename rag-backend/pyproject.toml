@@ -9,15 +9,13 @@ package-mode = false   # ✅ add this line
 python = "^3.11"
 fastapi = "*"
 uvicorn = "*"
-openai = "*"
 qdrant-client = "*"
 psycopg2-binary = "*"
 pydantic = "*"
 python-dotenv = "*"
 sqlalchemy = "*"
-tiktoken = "*"
 loguru = "*"
-sentence-transformers = "*"
+google-generativeai = "*"
 pydantic-settings = "*"
 
 [tool.poetry.group.dev.dependencies]

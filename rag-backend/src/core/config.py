@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Settings(BaseSettings):
-    # OpenAI
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY")
+    # Gemini
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY")
 
     # Qdrant
     QDRANT_URL: str = os.getenv("QDRANT_URL")

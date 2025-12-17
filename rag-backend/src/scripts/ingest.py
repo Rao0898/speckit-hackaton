@@ -15,9 +15,14 @@ from ...core.embeddings import get_embedding
 # Define collection name for Qdrant
 COLLECTION_NAME = "textbook_content"
 
-def get_text_chunks(text):
-    """Splits text into chunks by paragraph."""
-    return [paragraph.strip() for paragraph in text.split('\n\n') if paragraph.strip()]
+def get_text_chunks(text, max_tokens=1000):
+    """Splits text into chunks of a maximum number of tokens."""
+    words = text.split()
+    chunks = []
+    for i in range(0, len(words), max_tokens):
+        chunk_words = words[i : i + max_tokens]
+        chunks.append(" ".join(chunk_words))
+    return chunks
 
 def ingest_content():
     """
@@ -32,16 +37,16 @@ def ingest_content():
         collection_info = qdrant_client.get_collection(collection_name=COLLECTION_NAME)
         logger.info(f"Qdrant collection '{COLLECTION_NAME}' already exists.")
         # Check if vector size is correct
-        if collection_info.vectors_config.params.size != 384:
+        if collection_info.vectors_config.params.size != 768:
             logger.warning(f"Qdrant collection '{COLLECTION_NAME}' has incorrect vector size. Deleting and recreating.")
             qdrant_client.delete_collection(collection_name=COLLECTION_NAME)
             raise Exception("Recreating collection with correct vector size.")
     except Exception:
         qdrant_client.recreate_collection(
             collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+            vectors_config=VectorParams(size=768, distance=Distance.COSINE),
         )
-        logger.info(f"Created Qdrant collection '{COLLECTION_NAME}' with vector size 384.")
+        logger.info(f"Created Qdrant collection '{COLLECTION_NAME}' with vector size 768.")
 
     # Path to the docs directory, assuming script is run from rag-backend
     docs_path = Path(__file__).parent.parent.parent.parent / "docs"
