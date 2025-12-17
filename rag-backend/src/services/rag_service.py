@@ -1,5 +1,8 @@
 from openai import OpenAI
 import os
+import sys
+from pathlib import Path
+
 from ..core.qdrant import qdrant_client
 from ..models.query import QueryResponse, Citation, QuerySelectionRequest
 from ..core.logger import logger

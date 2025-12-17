@@ -18,6 +18,7 @@ sqlalchemy = "*"
 tiktoken = "*"
 loguru = "*"
 sentence-transformers = "*"
+pydantic-settings = "*"
 
 [tool.poetry.group.dev.dependencies]
 # example: pytest, black, etc. if needed
