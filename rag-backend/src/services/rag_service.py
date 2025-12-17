@@ -1,4 +1,6 @@
 import google.generativeai as genai
+import sys
+from pathlib import Path
 
 from ..core.qdrant import qdrant_client
 from ..models.query import QueryResponse, Citation, QuerySelectionRequest
