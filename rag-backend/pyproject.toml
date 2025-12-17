@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "rag-backend"
+version = "0.1.0"
+description = "RAG Chatbot Backend for the Physical AI Textbook"
+authors = ["Specify Agent <agent@specify.io>"]
+package-mode = false   # ✅ add this line
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "*"
+uvicorn = "*"
+openai = "*"
+qdrant-client = "*"
+psycopg2-binary = "*"
+pydantic = "*"
+python-dotenv = "*"
+sqlalchemy = "*"
+tiktoken = "*"
+loguru = "*"
+sentence-transformers = "*"
+
+[tool.poetry.group.dev.dependencies]
+# example: pytest, black, etc. if needed
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
