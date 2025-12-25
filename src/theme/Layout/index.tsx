@@ -65,7 +65,7 @@ function LayoutWithChatbotUI(props: Props): ReactNode {
             right: '20px !important',
             zIndex: 1000,
             width: '400px',
-            height: '400px',
+            maxHeight: '80vh',
             boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
             borderRadius: '10px',
             overflow: 'hidden',
