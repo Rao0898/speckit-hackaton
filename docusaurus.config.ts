@@ -49,7 +49,6 @@ const config: Config = {
       items: [
         { type: 'docSidebar', sidebarId: 'tutorialSidebar', position: 'left', label: 'Tutorial' },
         { to: '/blog', label: 'Blog', position: 'left' },
-        { to: '/chatbot', label: 'Chatbot', position: 'left' },
         { type: 'localeDropdown', position: 'right' },
         { href: 'https://github.com/facebook/docusaurus', label: 'GitHub', position: 'right' },
       ],

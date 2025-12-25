@@ -7,7 +7,7 @@ import Chatbot from '../../components/Chatbot';
 
 type Props = WrapperProps<typeof LayoutType>;
 
-function LayoutContent(props: Props): ReactNode {
+function LayoutWithChatbotUI(props: Props): ReactNode {
   const { setSelectedText, setIsChatbotOpen, isChatbotOpen, chatMessages, addChatMessage } = useChatbot();
 
   useEffect(() => {
@@ -63,8 +63,8 @@ function LayoutContent(props: Props): ReactNode {
             bottom: '90px',
             right: '20px',
             zIndex: 1000,
-            width: '400px', // Adjust width as needed
-            height: '600px', // Adjust height as needed
+            width: '400px',
+            height: '400px',
             boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
             borderRadius: '10px',
             overflow: 'hidden',
@@ -80,9 +80,7 @@ function LayoutContent(props: Props): ReactNode {
 export default function LayoutWrapper(props: Props): ReactNode {
   return (
     <ChatbotProvider>
-     
-        <LayoutContent {...props} />
-      
+      <LayoutWithChatbotUI {...props} />
     </ChatbotProvider>
   );
 }

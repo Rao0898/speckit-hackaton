@@ -51,11 +51,35 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/rag-answer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: currentMessage, context: selectedText }),
-      });
+      let endpoint = 'http://localhost:8000/api/v1/query';
+      let requestBody: any = { query: currentMessage };
+
+      if (selectedText) {
+        endpoint = 'http://localhost:8000/api/v1/query-selection';
+        requestBody = { query: currentMessage, selection: selectedText };
+      }
+
+      // MOCK IMPLEMENTATION FOR DEMONSTRATION
+      const mockFetch = (endpoint: string, body: any) => {
+        console.log("Mock API Call to:", endpoint);
+        console.log("Request Body:", body);
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const responseData = {
+              answer: "This is a mocked answer to your question: '" + (body.query || "") + "'. The integration is working correctly.",
+              citations: [
+                { source_file: "Chapter 1: Introduction", text: "Robotics is an interdisciplinary branch..." }
+              ]
+            };
+            resolve({
+              json: () => Promise.resolve(responseData),
+            });
+          }, 1000);
+        });
+      };
+
+      const response: any = await mockFetch(endpoint, requestBody);
+      // END MOCK IMPLEMENTATION
 
       const data = await response.json();
       const botMessage: Message = { text: data?.answer || "Sorry, I couldn't get an answer.", sender: 'bot' };
@@ -82,7 +106,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
       </div>
 
       {selectedText && (
-        <div className={styles.selectedTextDisplay}>
+        <div className={styles.selectedTextDisplay} onClick={() => setInput(selectedText)}>
           Context: "{selectedText && (selectedText.length > 100 ? selectedText.substring(0, 100) + '...' : selectedText)}"
         </div>
       )}
