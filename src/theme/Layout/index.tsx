@@ -59,9 +59,10 @@ function LayoutWithChatbotUI(props: Props): ReactNode {
       {isChatbotOpen && (
         <div
           style={{
-            position: 'fixed',
-            bottom: '90px',
-            right: '20px',
+            position: 'fixed !important',
+            top: 'auto !important',
+            bottom: '80px !important',
+            right: '20px !important',
             zIndex: 1000,
             width: '400px',
             height: '400px',
