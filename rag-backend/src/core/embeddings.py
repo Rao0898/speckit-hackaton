@@ -1,21 +1,38 @@
-import os
-import google.generativeai as genai
-from ..core.config import settings
+import voyageai
+from src.core.config import settings
+import time
 
-genai.configure(api_key=settings.GEMINI_API_KEY)
+# Voyage Client initialize karein
+client = voyageai.Client(api_key=settings.VOYAGE_API_KEY)
 
-def get_embedding(text: str) -> list[float]:
+def get_embedding(text: str, model: str = "voyage-3") -> list[float]:
     """
-    Generates an embedding for the given text using the Gemini API.
-
-    Args:
-        text: The text to embed.
-
-    Returns:
-        A list of floats representing the embedding.
+    Voyage AI use karke embedding generate karen.
     """
-    return genai.embed_content(
-        model="models/embedding-001",
-        content=text,
-        task_type="retrieval_document"
-    )["embedding"]
+    retries = 3
+    for i in range(retries):
+        try:
+            # Voyage ka sahi tareeqa: client.embed()
+            # OpenAI ki tarah .embeddings.create nahi hota yahan
+            response = client.embed(
+                [text], 
+                model=model, 
+                input_type="document"
+            )
+            
+            # Voyage mein response.embeddings[0] se data milta hai
+            return response.embeddings[0]
+            
+        except Exception as e:
+            # Yahan se 'openai' ka zikr bilkul khatam kar diya hai
+            print(f"Error occurred with Voyage: {e}")
+            
+            if i < retries - 1:
+                wait_time = 2 ** i
+                print(f"Retrying in {wait_time}s...")
+                time.sleep(wait_time)
+            else:
+                # Agar saare retries khatam ho jayein
+                return None
+                
+    return None

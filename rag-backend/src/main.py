@@ -1,14 +1,37 @@
+import os
+from dotenv import load_dotenv
+from .core.logger import logger
+
+# Load environment variables
+load_dotenv()
+
+
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware # Import CORSMiddleware
 from .api import query
-from .core.logger import logger
 from .core.exceptions import CustomException, http_exception_handler, custom_exception_handler, validation_exception_handler
 
 app = FastAPI(
     title="RAG Chatbot Backend",
     description="API for the Physical AI & Humanoid Robotics textbook RAG chatbot.",
     version="1.0.0",
+)
+
+# Add CORS middleware
+# Best practice: use environment variables for allowed origins
+origins_str = os.getenv("ALLOWED_FRONTEND_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")
+origins = [o.strip() for o in origins_str.split(',') if o.strip()]
+
+print(f"FastAPI CORS configured with ALLOWED_ORIGINS: {origins}") # For debugging
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(query.router, prefix="/api/v1")

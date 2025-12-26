@@ -65,7 +65,7 @@
 
 ### Implementation for User Story 3
 
-- [x] T020 [P] [US3] Implement the `/rag-answer` endpoint from `contracts/api.yaml` in `rag-backend/src/main.py`.
+- [x] T020 [P] [US3] Implement the `http://127.0.0.1:8000/api/v1/query` endpoint from `contracts/api.yaml` in `rag-backend/src/main.py`.
 - [x] T021 [US3] Create a new React component for the chatbot UI in `my-book/src/components/Chatbot/`.
 - [x] T022 [US3] Add the `Chatbot` component to the Docusaurus layout in `my-book/src/theme/Layout/index.tsx`.
 - [x] T023 [P] [US3] Write content for Module 3 "NVIDIA Isaac" in `my-book/docs/module3-nvidia-isaac/`.

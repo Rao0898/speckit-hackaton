@@ -1,7 +1,10 @@
-I have created the feature specification for the "Physical AI & Humanoid Robotics" textbook.
+I have resolved the issues with the ingestion script. Here is a summary of the changes:
 
-- **Branch**: `001-spec-physical-ai-textbook`
-- **Specification**: `specs/001-spec-physical-ai-textbook/spec.md`
-- **Checklist**: `specs/001-spec-physical-ai-textbook/checklists/requirements.md` (All checks passed)
+1.  **Corrected Content Source**: The script now correctly points to the `my-book/docs/` directory, where your textbook content is located.
+2.  **Modernized Database Connection**: I've updated the script to use the latest standards for connecting to and creating collections in the Qdrant database.
+3.  **Centralized Configuration**: The script now uses a single, reliable method for loading configuration, which has resolved the network errors you were seeing.
+4.  **Added API Key Checks**: I've added checks for the required API keys.
 
-The specification is complete and ready for the next phase (`/sp.plan`).
+To complete the process and ingest your data, you now need to edit the `rag-backend/.env` file and replace the placeholder values for `OPENAI_API_KEY` and `GEMINI_API_KEY` with your actual keys.
+
+After you have updated the keys, you can run the ingestion command again and it will proceed with processing and indexing your content.

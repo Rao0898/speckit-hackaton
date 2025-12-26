@@ -36,7 +36,7 @@ paths:
         '400':
           description: Bad request (e.g., missing query).
 
-  /rag-answer:
+  /api/v1/query:
     post:
       summary: Get a RAG-generated answer
       description: Takes a user query, performs a search to find relevant context, and then uses a language model to generate a comprehensive answer.

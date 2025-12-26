@@ -1,0 +1,129 @@
+openapi: 3.0.0
+info:
+  title: RAG Chatbot Backend API
+  version: 1.0.0
+  description: |
+    API for the "Physical AI & Humanoid Robotics" textbook RAG chatbot.
+    Provides endpoints for answering general questions and questions based on user-selected text.
+
+paths:
+  /query:
+    post:
+      summary: Ask a general question
+      operationId: queryGeneral
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+
+  /query-selection:
+    post:
+      summary: Ask a question about a specific text selection
+      operationId: querySelection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuerySelectionRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+
+components:
+  schemas:
+    QueryRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: The user's question.
+          example: "What is Physical AI?"
+
+    QuerySelectionRequest:
+      type: object
+      required:
+        - query
+        - selection
+      properties:
+        query:
+          type: string
+          description: The user's question about the selection.
+          example: "What is the key takeaway from this section?"
+        selection:
+          type: string
+          description: The block of text selected by the user.
+          example: "Physical AI is the study of intelligent agents that can perceive and act in the physical world."
+
+    QueryResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+          description: The generated answer to the query.
+          example: "Physical AI is the study of intelligent agents that operate in the real world."
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
+
+    Citation:
+      type: object
+      properties:
+        source_file:
+          type: string
+          description: The source file of the content chunk.
+          example: "docs/01-intro.md"
+        text:
+          type: string
+          description: The text of the source content chunk.
+          example: "Physical AI is the study of intelligent agents that can perceive and act in the physical world."
+
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          
+    ValidationError:
+      type: object
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+        msg:
+          type: string
+        type:
+          type: string

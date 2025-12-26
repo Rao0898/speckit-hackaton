@@ -26,7 +26,7 @@ response_text: |
   The frontend UI is designed to display a full conversation (user and bot messages). However, after completing everything in the `quickstart.md` file, the chatbot's messages will **not** immediately appear in the frontend UI as expected due to an API mismatch.
 
   **Reasoning:**
-  1.  **Endpoint Mismatch**: The frontend expects to send requests to `http://localhost:8000/rag-answer`, but the new backend provides `/api/v1/query` and `/api/v1/query-selection`.
+  1.  **Endpoint Mismatch**: The frontend expects to send requests to `http://127.0.0.1:8000/api/v1/query`, but the new backend provides `/api/v1/query` and `/api/v1/query-selection`.
   2.  **Request Body Mismatch**: The frontend sends a `context` field, while the backend expects a `selection` field for selection-based queries.
 
   Once these API integration issues are resolved by updating the frontend to call the correct backend endpoints with the correct request bodies, **yes, the full conversation between the user and the agent will be displayed in the frontend UI**, as its state management and rendering logic are already in place for a conversation flow.

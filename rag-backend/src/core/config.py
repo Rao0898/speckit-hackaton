@@ -1,23 +1,24 @@
-import os
 from functools import lru_cache
 from pydantic_settings import BaseSettings
-from dotenv import load_dotenv
-
-load_dotenv()
 
 class Settings(BaseSettings):
     # Gemini
-    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY")
+    GEMINI_API_KEY: str
+    VOYAGE_API_KEY: str
 
     # Qdrant
-    QDRANT_URL: str = os.getenv("QDRANT_URL")
-    QDRANT_API_KEY: str = os.getenv("QDRANT_API_KEY")
+    QDRANT_URL: str | None = None
+    QDRANT_API_KEY: str | None = None
+    VOYAGE_API_KEY: str 
 
     # Neon (Postgres)
-    DATABASE_URL: str = os.getenv("DATABASE_URL")
+    DATABASE_URL: str = "sqlite:///./rag.db"
 
     class Config:
         case_sensitive = True
+        env_file = ".env"
+        extra = 'ignore'
+
 
 
 @lru_cache()

@@ -1,87 +1,66 @@
-import google.generativeai as genai
-import sys
-from pathlib import Path
-
+import os
+from google import genai
+from ..core.config import settings
 from ..core.qdrant import qdrant_client
 from ..models.query import QueryResponse, Citation, QuerySelectionRequest
 from ..core.logger import logger
 from ..core.embeddings import get_embedding
 
-# Initialize Gemini client for chat completions
-model = genai.GenerativeModel('gemini-pro')
-COLLECTION_NAME = "textbook_content"
+# FORCE: Delete any existing global GOOGLE_API_KEY from environment
+if "GOOGLE_API_KEY" in os.environ:
+    del os.environ["GOOGLE_API_KEY"]
+
+# FORCE: Use the key strictly from our settings (.env)
+client = genai.Client(api_key=settings.GEMINI_API_KEY)
+
+COLLECTION_NAME = "Voyage-embediing-collection"
 
 class RAGService:
     def query_general(self, query: str) -> QueryResponse:
-        """
-        Handles a general query by retrieving context and generating an answer.
-        """
         logger.info(f"Received general query: {query}")
         query_embedding = get_embedding(query)
 
-        # Search for relevant context in Qdrant
-        search_results = qdrant_client.search(
+        search_results = qdrant_client.query_points(
             collection_name=COLLECTION_NAME,
-            query_vector=query_embedding,
-            limit=3,  # Return top 3 most relevant chunks
+            query=query_embedding,
+            limit=5,
+            with_payload=True,
         )
 
         context = ""
         citations = []
-        for result in search_results:
-            context += result.payload["text"] + "\n\n"
-            citations.append(
-                Citation(
-                    source_file=result.payload["source_file"],
-                    text=result.payload["text"],
+        for result in search_results.points:
+            if result.payload and "text" in result.payload:
+                context += result.payload["text"] + "\n\n"
+                citations.append(
+                    Citation(
+                        source_file=result.payload.get("source_file", "unknown"),
+                        text=result.payload["text"],
+                    )
                 )
+        
+        if not citations:
+            return QueryResponse(answer="Context not found.", citations=[])
+
+        prompt = f"Answer strictly using this context:\n{context}\n\nQuestion: {query}"
+        
+        try:
+            # TRYING THE MOST COMPATIBLE VERSION
+            response = client.models.generate_content(
+                model="gemini-2.5-flash", 
+                contents=prompt
             )
-        logger.info(f"Retrieved {len(citations)} citations for general query.")
-        # Construct the prompt
-        prompt = f"""
-        You are a helpful assistant for the 'Physical AI & Humanoid Robotics' textbook.
-        Answer the following question based on the provided context.
-        Your answer must be grounded in the context. Do not use outside knowledge.
+            answer = response.text
+            logger.info("Success! Gemini responded.")
+        except Exception as e:
+            logger.error(f"Gemini Error: {e}")
+            answer = f"Gemini is still blocked. Error: {e}"
 
-        Context:
-        ---
-        {context}
-        ---
-
-        Question: {query}
-        """
-
-        # Generate the answer using Gemini
-        response = model.generate_content(prompt)
-        answer = response.text
-        logger.info("Generated answer for general query.")
         return QueryResponse(answer=answer, citations=citations)
 
     def query_selection(self, request: QuerySelectionRequest) -> QueryResponse:
-        """
-        Handles a query based on a specific text selection.
-        """
-        logger.info(f"Received selection query: {request.query} with selection length {len(request.selection)}")
-        context = request.selection
-
-        # Construct the prompt
-        prompt = f"""
-        You are a helpful assistant. Answer the question strictly based on the provided text.
-        Do not use any outside knowledge. If the answer is not in the text, say so.
-
-        Text:
-        ---
-        {context}
-        ---
-
-        Question: {request.query}
-        """
-
-        # Generate the answer using Gemini
-        response = model.generate_content(prompt)
-        answer = response.text
-        logger.info("Generated answer for selection query.")
-        # For selection-based queries, the citation is the selection itself
-        citations = [Citation(source_file="user_selection", text=context)]
-
-        return QueryResponse(answer=answer, citations=citations)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=f"Text: {request.selection}\nQuestion: {request.query}"
+        )
+        return QueryResponse(answer=response.text, citations=[Citation(source_file="selection", text=request.selection)])

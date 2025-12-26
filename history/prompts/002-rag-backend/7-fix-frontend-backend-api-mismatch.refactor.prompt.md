@@ -8,7 +8,7 @@ model: "gemini-1.5-pro"
 feature: "002-rag-backend"
 branch: "002-rag-backend"
 user: "default"
-command: "Check the frontend and backend integration.\n\nThere is a mismatch between the frontend and backend:\n\n1. The frontend currently calls http://localhost:8000/rag-answer, but the backend provides /api/v1/query and /api/v1/query-selection.\n2. The frontend sends a request body with a 'context' field, but the backend expects a 'selection' field for selection-based queries.\n\nYour task: Fix only this mismatch so that the frontend calls the correct backend endpoints with the correct request body.\n\nDo not make any other changes to the frontend or backend code. Only fix this API mismatch."
+command: "Check the frontend and backend integration.\n\nThere is a mismatch between the frontend and backend:\n\n1. The frontend currently calls http://127.0.0.1:8000/api/v1/query, but the backend provides /api/v1/query and /api/v1/query-selection.\n2. The frontend sends a request body with a 'context' field, but the backend expects a 'selection' field for selection-based queries.\n\nYour task: Fix only this mismatch so that the frontend calls the correct backend endpoints with the correct request body.\n\nDo not make any other changes to the frontend or backend code. Only fix this API mismatch."
 labels: ["api-integration", "frontend", "backend"]
 links:
   spec: "specs/002-rag-backend/spec.md"
@@ -23,7 +23,7 @@ prompt_text: |
 
   There is a mismatch between the frontend and backend:
 
-  1. The frontend currently calls http://localhost:8000/rag-answer, but the backend provides /api/v1/query and /api/v1/query-selection.
+  1. The frontend currently calls http://127.0.0.1:8000/api/v1/query, but the backend provides /api/v1/query and /api/v1/query-selection.
   2. The frontend sends a request body with a 'context' field, but the backend expects a 'selection' field for selection-based queries.
 
   Your task: Fix only this mismatch so that the frontend calls the correct backend endpoints with the correct request body.
