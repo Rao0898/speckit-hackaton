@@ -18,7 +18,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fix #1: Safe variables for length check
   const safeInitial = initialMessages || [];
   const safeChat = chatMessages || [];
 
@@ -39,7 +38,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
 
     let currentMessage = input.trim();
     if (selectedText && !input.trim()) {
-      // Fix #2: selectedText safe length check
       currentMessage = `Based on "${selectedText}", ${selectedText && selectedText.length > 50 ? "what can you tell me?" : "explain this."}`;
     } else if (selectedText) {
       currentMessage = `Regarding "${selectedText}", ${input.trim()}`;
@@ -51,8 +49,10 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/v1/query", {
-
+      // FIX: Yahan TypeScript error fix kar diya hai (import.meta as any)
+      const API_BASE_URL = (import.meta as any).env.VITE_API_URL || "http://127.0.0.1:8000";
+      
+      const response = await fetch(`${API_BASE_URL}/api/v1/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: currentMessage, context: selectedText }),
