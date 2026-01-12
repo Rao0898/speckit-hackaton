@@ -23,7 +23,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
 
   useEffect(() => {
     if (safeInitial.length !== safeChat.length || safeInitial[safeInitial.length - 1] !== safeChat[safeChat.length - 1]) {
-      // Sync logic if needed
+      // Sync logic
     }
   }, [safeInitial, safeChat]);
 
@@ -49,10 +49,8 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
     setLoading(true);
 
     try {
-      // FIX: Yahan TypeScript error fix kar diya hai (import.meta as any)
-      const API_BASE_URL = (import.meta as any).env.VITE_API_URL || "http://127.0.0.1:8000";
-      
-      const response = await fetch(`${API_BASE_URL}/api/v1/query`, {
+      // FIXED: No more import.meta. Direct Render URL for Docusaurus compatibility.
+      const response = await fetch("https://speckit-backend.onrender.com/api/v1/query", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: currentMessage, context: selectedText }),
