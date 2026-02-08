@@ -18,6 +18,12 @@ COLLECTION_NAME = "Voyage-embediing-collection"
 class RAGService:
     def query_general(self, query: str) -> QueryResponse:
         logger.info(f"Received general query: {query}")
+
+        # Check for greeting messages
+        greetings = ["hi", "hello", "assalam-o-alaikum", "salam"]
+        if query.lower() in greetings:
+            return QueryResponse(answer="Hello there! How can I assist you today?", citations=[])
+
         query_embedding = get_embedding(query)
 
         search_results = qdrant_client.query_points(

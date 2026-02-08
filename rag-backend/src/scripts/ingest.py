@@ -5,7 +5,16 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance
-from src.core.config import settings
+from src.core.config import settings # Keep settings for other values
+from dotenv import dotenv_values, find_dotenv
+
+# Directly load VOYAGE_API_KEY for placeholder check
+dotenv_path = find_dotenv(usecwd=True)
+if dotenv_path:
+    config_from_dotenv = dotenv_values(dotenv_path)
+    VOYAGE_API_KEY_DIRECT = config_from_dotenv.get("VOYAGE_API_KEY")
+else:
+    VOYAGE_API_KEY_DIRECT = None
 from src.core.embeddings import get_embedding
 from src.core.database import SessionLocal
 from src.services.content_chunk_dao import ContentChunkDAO

@@ -20,7 +20,7 @@ app = FastAPI(
 
 # --- CORS Update START ---
 # Hum dono variables check kar rahe hain taake ghalti ki gunjayish na rahe
-origins_str = os.getenv("ALLOWED_FRONTEND_ORIGINS") or os.getenv("ALLOWED_ORIGINS") or "http://localhost:3000,http://127.0.0.1:3000"
+origins_str = os.getenv("ALLOWED_FRONTEND_ORIGINS") or os.getenv("ALLOWED_ORIGINS") or "https://humanoid-book.vercel.app,http://localhost:3000,http://127.0.0.1:3000"
 origins = [o.strip() for o in origins_str.split(',') if o.strip()]
 
 # Dashboard par nazar aayega ke backend ne kaunsa link uthaya

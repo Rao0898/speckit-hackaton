@@ -1,3 +1,4 @@
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import styles from './styles.module.css';
 import { useChatbot } from '../../contexts/ChatbotContext';
@@ -13,6 +14,8 @@ interface ChatbotProps {
 }
 
 const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
+  const { siteConfig } = useDocusaurusContext();
+  const { backendUrl } = siteConfig.customFields as { backendUrl: string };
   const { selectedText, chatMessages, addChatMessage } = useChatbot();
   const [input, setInput] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,8 +52,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
     setLoading(true);
 
     try {
-      // FIXED: No more import.meta. Direct Render URL for Docusaurus compatibility.
-      const response = await fetch("https://speckit-backend.onrender.com/api/v1/query", {
+      const response = await fetch(`${backendUrl}/api/v1/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: currentMessage, context: selectedText }),

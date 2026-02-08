@@ -20,6 +20,10 @@ const config: Config = {
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
+  customFields: {
+    backendUrl: process.env.BACKEND_URL || 'http://127.0.0.1:8000',
+  },
+
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'physical-ai-robotics', // Usually your GitHub org/user name.
