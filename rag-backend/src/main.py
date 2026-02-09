@@ -9,8 +9,7 @@ from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from .api import query
-from .core.exceptions import CustomException, http_exception_handler, custom_exception_handler, validation_exception_handler
+from .api import query, translation
 
 app = FastAPI(
     title="RAG Chatbot Backend",
@@ -36,6 +35,7 @@ app.add_middleware(
 # --- CORS Update END ---
 
 app.include_router(query.router, prefix="/api/v1")
+app.include_router(translation.router, prefix="/api/v1") # Include translation router
 
 # Register exception handlers
 app.add_exception_handler(HTTPException, http_exception_handler)

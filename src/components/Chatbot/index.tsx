@@ -1,3 +1,4 @@
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import styles from './styles.module.css';
 import { useChatbot } from '../../contexts/ChatbotContext';
@@ -13,18 +14,19 @@ interface ChatbotProps {
 }
 
 const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
+  const { siteConfig } = useDocusaurusContext();
+  const { backendUrl } = siteConfig.customFields as { backendUrl: string };
   const { selectedText, chatMessages, addChatMessage } = useChatbot();
   const [input, setInput] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fix #1: Safe variables for length check
   const safeInitial = initialMessages || [];
   const safeChat = chatMessages || [];
 
   useEffect(() => {
     if (safeInitial.length !== safeChat.length || safeInitial[safeInitial.length - 1] !== safeChat[safeChat.length - 1]) {
-      // Sync logic if needed
+      // Sync logic
     }
   }, [safeInitial, safeChat]);
 
@@ -39,7 +41,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
 
     let currentMessage = input.trim();
     if (selectedText && !input.trim()) {
-      // Fix #2: selectedText safe length check
       currentMessage = `Based on "${selectedText}", ${selectedText && selectedText.length > 50 ? "what can you tell me?" : "explain this."}`;
     } else if (selectedText) {
       currentMessage = `Regarding "${selectedText}", ${input.trim()}`;
@@ -51,35 +52,11 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
     setLoading(true);
 
     try {
-      let endpoint = 'http://localhost:8000/api/v1/query';
-      let requestBody: any = { query: currentMessage };
-
-      if (selectedText) {
-        endpoint = 'http://localhost:8000/api/v1/query-selection';
-        requestBody = { query: currentMessage, selection: selectedText };
-      }
-
-      // MOCK IMPLEMENTATION FOR DEMONSTRATION
-      const mockFetch = (endpoint: string, body: any) => {
-        console.log("Mock API Call to:", endpoint);
-        console.log("Request Body:", body);
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            const responseData = {
-              answer: "This is a mocked answer to your question: '" + (body.query || "") + "'. The integration is working correctly.",
-              citations: [
-                { source_file: "Chapter 1: Introduction", text: "Robotics is an interdisciplinary branch..." }
-              ]
-            };
-            resolve({
-              json: () => Promise.resolve(responseData),
-            });
-          }, 1000);
-        });
-      };
-
-      const response: any = await mockFetch(endpoint, requestBody);
-      // END MOCK IMPLEMENTATION
+      const response = await fetch(`${backendUrl}/api/v1/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: currentMessage, context: selectedText }),
+      });
 
       const data = await response.json();
       const botMessage: Message = { text: data?.answer || "Sorry, I couldn't get an answer.", sender: 'bot' };
@@ -106,7 +83,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ initialMessages, onNewMessage }) => {
       </div>
 
       {selectedText && (
-        <div className={styles.selectedTextDisplay} onClick={() => setInput(selectedText)}>
+        <div className={styles.selectedTextDisplay}>
           Context: "{selectedText && (selectedText.length > 100 ? selectedText.substring(0, 100) + '...' : selectedText)}"
         </div>
       )}

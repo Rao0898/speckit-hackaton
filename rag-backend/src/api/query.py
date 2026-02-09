@@ -10,7 +10,7 @@ def query_general(request: QueryRequest):
     """
     Handles a general question about the textbook.
     """
-    return rag_service.query_general(request.query)
+    return rag_service.query_general(request.query, request.language)
 
 @router.post("/query-selection", response_model=QueryResponse)
 def query_selection(request: QuerySelectionRequest):

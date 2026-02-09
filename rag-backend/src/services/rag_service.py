@@ -16,13 +16,16 @@ client = genai.Client(api_key=settings.GEMINI_API_KEY)
 COLLECTION_NAME = "Voyage-embediing-collection"
 
 class RAGService:
-    def query_general(self, query: str) -> QueryResponse:
-        logger.info(f"Received general query: {query}")
+    def query_general(self, query: str, language: str = "en") -> QueryResponse:
+        logger.info(f"Received general query: {query}, language: {language}")
 
         # Check for greeting messages
         greetings = ["hi", "hello", "assalam-o-alaikum", "salam"]
         if query.lower() in greetings:
-            return QueryResponse(answer="Hello there! How can I assist you today?", citations=[])
+            if language == "ur":
+                return QueryResponse(answer="وعلیکم السلام! میں آپ کی نصابی کتاب سمجھنے میں کیسے مدد کر سکتا ہوں؟", citations=[])
+            else:
+                return QueryResponse(answer="Hello there! How can I assist you today?", citations=[])
 
         query_embedding = get_embedding(query)
 

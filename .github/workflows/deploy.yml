@@ -18,22 +18,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          # Temporarily disabling cache to avoid warning
-          # cache: npm
-          # cache-dependency-path: my-book/package-lock.json
+          cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: my-book
         run: npm ci
 
       - name: Build website
-        working-directory: my-book
         run: npm run build
 
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: my-book/build
+          path: build
 
   deploy:
     name: Deploy to GitHub Pages

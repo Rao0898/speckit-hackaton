@@ -3,6 +3,7 @@ from typing import List, Optional
 
 class QueryRequest(BaseModel):
     query: str
+    language: Optional[str] = "en"
 
 class Citation(BaseModel):
     source_file: str
