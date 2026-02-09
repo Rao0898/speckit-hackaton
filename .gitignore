@@ -1,33 +1,3 @@
-<<<<<<< HEAD
-# IDE and OS files
-.vscode/
-.idea/
-.DS_Store
-*.swp
-
-# Logs
-*.log
-
-# Environment files
-.env*
-!/.env.example
-
-# Python
-__pycache__/
-*.pyc
-.venv/
-venv/
-
-# Node
-node_modules/
-dist/
-build/
-.npm/
-
-# Docusaurus temp files
-my-book/.docusaurus/
-my-book/.cache-loader/
-=======
 # Dependencies
 /node_modules
 
@@ -48,4 +18,3 @@ my-book/.cache-loader/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
->>>>>>> efcabe92ee5550caaed810d22dd0fd9f8f25c91d
