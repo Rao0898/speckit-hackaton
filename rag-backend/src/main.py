@@ -5,7 +5,7 @@ from .core.logger import logger
 # Load environment variables
 load_dotenv()
 
-from fastapi import FastAPI, HTTPException, Request, status
+from .core.exceptions import http_exception_handler, CustomException, custom_exception_handler, validation_exception_handler
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
