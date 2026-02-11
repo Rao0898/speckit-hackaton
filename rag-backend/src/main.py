@@ -8,6 +8,7 @@ load_dotenv()
 from .core.exceptions import http_exception_handler, CustomException, custom_exception_handler, validation_exception_handler
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from .api import query, translation
 
