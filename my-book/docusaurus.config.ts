@@ -15,7 +15,7 @@ const config: Config = {
   url: 'https://physical-ai-humanoid-robotics.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/my-book/',
+  baseUrl: '/',
 
   customFields: {
     backendUrl: process.env.BACKEND_URL || 'http://127.0.0.1:8000',
